@@ -687,7 +687,7 @@ body {
       const create = (hash) => {
         processHash(hash);
         defineAttributes();
-        const bgBaseColor = LightenDarkenColor(getNextColor(), -127);
+        const bgBaseColor = LightenDarkenColor(getNextColor(), -100);
         setBgGradient(bgBaseColor, 50);
         nucleation();
         generateBubbles();
