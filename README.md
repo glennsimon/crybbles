@@ -1,4 +1,4 @@
-![crybbles image](https://github.com/glennsimon/crybbles/images/crybble9-1400x400.png?raw=true)
+![crybbles image](images/crybble9-1400x400.png?raw=true)
 # Crybbles III-IV-V
 Generative art prototype
 
