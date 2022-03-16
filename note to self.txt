@@ -1,8 +1,8 @@
 Used NPM terser to compress javascript.
 
 Terser can only compress javascript (not HTML) so I copied the <script> 
-into a separate .js file called cr0310.js, then ran:
-terser .\cr0310.js -o .\cr0310min.js -c -m toplevel=true --source-map "filename='cr0310min.js.map'"
+into a separate .js file called cr0311.js, then ran:
+terser .\cr0311.js -o .\cr0311min.js -c -m toplevel=true --source-map "filename='cr0311min.js.map'"
 
 Then I copied the compressed javascript into the script tag in a new HTML file.
 
@@ -13,7 +13,8 @@ able to remove the entire 'y' function without any noticable effect on the progr
 it is never called), and reduced the size by several hundred bytes as a result.
 
 Prior to running terser, I copied crybbles0309.html into crybbles0310.html, and manually compressed the
-CSS portion where I could.
+CSS portion where I could.  crybbles0311.html is a further modification which programatically creates all
+of the div tags in <body>.
 
 The combination of all of these efforts reduced the minimized html file from 14529 bytes to 9907 bytes.
 The uncompressed crybbles0309.html file was 25216 bytes.  My goal was to get the compressed file to below
