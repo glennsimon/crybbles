@@ -40,6 +40,7 @@ const bubbleEngine = [];
 const visibleBubbles = [];
 
 const style = document.createElement('style');
+style.type = 'text/css';
 const setBgGradient = (upperBgColor, lightening) => {
   style.innerHTML = `
 * {box-sizing: border-box;position: absolute;}
@@ -361,15 +362,29 @@ const chooseNextIdx = () => {
 };
 
 const defineAttributes = () => {
+  // number of bubble instantiation sites
   attributes.numberOfBubbles = lerpInteger(
     nBubblesRange[0],
     nBubblesRange[1]
   );
+  // floor rotation period (0 means no rotation)
   attributes.floorRotPeriod = lerpInteger(0, 3) * 15;
-  attributes.bubbleTypes = lerpInteger(1, 3);
+  // bubble types
+  const numBubbleTypes = lerpInteger(1, 3);
+  let bubbleTypes = ['cube', 'tetra', 'dodec'];
+  if (numBubbleTypes !== 3) {
+    bubbleTypes.splice(lerpInteger(-1, 1), 1);
+  }
+  if (numBubbleTypes === 1) {
+    bubbleTypes.splice(lerpInteger(0, 1), 1);
+  }
+  attributes.bubbleTypes = bubbleTypes;
+  // background base color (dark end of gradient)
   attributes.bgBaseColor = LightenDarkenColor(getNextColor(), -100);
+  // 1 in 5 chance of bubbles continuing to spin after 10 sec
+  attributes.spinPause = lerpInteger(1, 5) < 5;
 
-  // attributes.colorScheme =
+  console.log(attributes);
 };
 
 const processHash = (hash) => {
@@ -430,17 +445,9 @@ const nucleation = () => {
     ]);
   }
 
-  let bubbleTypes = ['cube', 'tetra', 'dodec'];
-  if (attributes.bubbleTypes !== 3) {
-    bubbleTypes.splice(lerpInteger(-1, 1), 1);
-  }
-  if (attributes.bubbleTypes === 1) {
-    bubbleTypes.splice(lerpInteger(0, 1), 1);
-  }
-
   for (let i = 0; i < numberOfBubbles; i++) {
     nucleusData[i] = {};
-    nucleusData[i].bubbleType = bubbleTypes[i % bubbleTypes.length];
+    nucleusData[i].bubbleType = attributes.bubbleTypes[i % attributes.bubbleTypes.length];
     nucleusData[i].location = nucleusSites[i];
   }
 
@@ -531,7 +538,6 @@ const clearInvisibleBubbles = () => {
 
 let visibilityCheckerID;
 const pauseBubbles = () => {
-  const rotationPause = lerpInteger(1, 5) < 5;
   for (let bNum = 0; bNum < attributes.numberOfBubbles; bNum++) {
     clearInterval(bubbleEngine[bNum]);
 
@@ -547,7 +553,7 @@ const pauseBubbles = () => {
     for (const element of elements) {
       element.style.animationPlayState = 'paused';
     }
-    if (rotationPause) {
+    if (attributes.spinPause) {
       elements = document.body.getElementsByClassName(
         'b' + bNum + '-element'
       );
