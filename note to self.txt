@@ -1,7 +1,7 @@
 Used NPM terser to compress javascript.
 
 Terser can only compress javascript (not HTML) so I copied the <script> portion of crybbles0312.html
-into a separate .js file called cr0311.js, then ran:
+into a separate .js file called cr0312.js, then ran:
 terser .\cr0312.js -o .\cr0312min.js -c -m toplevel=true --source-map "filename='cr0312min.js.map'"
 
 Then I copied the compressed javascript into the script tag in a new HTML file.
@@ -19,6 +19,6 @@ defineAttributes function.  During development of the defineAttributes function 
 console.log(attributes) call for debugging purposes.  I manually removed the console.log call from the 
 compressed javascript.
 
-The combination of all of these efforts reduced the minimized html file from 14529 bytes to 9907 bytes.
+The combination of all of these efforts reduced the minimized html file from 14529 bytes to 9784 bytes.
 The uncompressed crybbles0309.html file was 25216 bytes.  My goal was to get the compressed file to below
 10000 bytes to minimize cost and effort adding it to the Etherium block chain.
