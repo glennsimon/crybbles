@@ -1,6 +1,3 @@
-const tokenData = { 'hash': '0xb8eb7ea2d24c05e61ff504eb21adbdd85d34c4c65e337645ff930bf831479122', 'tokenId': '123000456' };
-
-
 /**
  * Calculate features for the given token data.
  * @param {Object} tokenData
@@ -48,7 +45,7 @@ const tokenData = { 'hash': '0xb8eb7ea2d24c05e61ff504eb21adbdd85d34c4c65e337645f
     // floor rotation period (0 means no rotation)
     const floorIdx = lerpInteger(0, 3);
     attributes.floorRotPeriod = floorIdx * 15;
-    featureObj['floor rotation speed'] = ['none', 'slow', 'medium', 'fast'][floorIdx];
+    featureObj['floor rotation speed'] = ['none', 'fast', 'medium', 'slow'][floorIdx];
 
     // bubble types
     const numBubbleTypes = lerpInteger(1, 3);
@@ -67,6 +64,7 @@ const tokenData = { 'hash': '0xb8eb7ea2d24c05e61ff504eb21adbdd85d34c4c65e337645f
     // background base color (dark end of gradient)
     attributes.bgBaseColor = LightenDarkenColor(getNextColor(), -100);
     const bgColor = LightenDarkenColor(attributes.bgBaseColor, 50);
+    attributes.bgLightColor = bgColor;
     const colorLevels = [];
     for (let i = 1; i < 6; i += 2) {
       const level = parseInt(bgColor.slice(i, i + 2), 16);
@@ -140,5 +138,3 @@ const tokenData = { 'hash': '0xb8eb7ea2d24c05e61ff504eb21adbdd85d34c4c65e337645f
   create(tokenData.hash);
   return featureObj;
 }
-
-const featureSet = calculateFeatures(tokenData);
