@@ -1,8 +1,8 @@
 Used NPM terser to compress javascript.
 
-Terser can only compress javascript (not HTML) so I copied the <script> portion of crybbles0312.html
-into a separate .js file called cr0312.js, then ran:
-terser .\cr0312.js -o .\cr0312min.js -c -m toplevel=true --source-map "filename='cr0312min.js.map'"
+Terser can only compress javascript (not HTML) so I copied the <script> portion of crybbles0313.html
+into a separate .js file called cr0313.js, then ran:
+terser .\cr0313.js -o .\cr0313min.js -c -m toplevel=true --source-map "filename='cr0313min.js.map'"
 
 Then I copied the compressed javascript into the script tag in a new HTML file.
 

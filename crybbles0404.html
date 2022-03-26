@@ -20,15 +20,14 @@
       // tokenData = { 'hash': '0x647cdbbcfdf25c675c192f8b5cc9effa11059624aed979c5564027d3a69404bb', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0xfd66c308e4d5c037f81e97c28d32bf2358a92e5bc562ac21062f59382a6491d2', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0x6b9e1c018321c9f46ca06308f3023c38621c83fba821807224e29dde7bc6f5ee', 'tokenId': '123000456' }
-      // tokenData = { 'hash': '0x76f32cf7e67cd6a49ba9c016c327477dbbb5d9c6e3d9333642dcbc350fb4c75d', 'tokenId': '123000456' }
+      tokenData = { 'hash': '0x76f32cf7e67cd6a49ba9c016c327477dbbb5d9c6e3d9333642dcbc350fb4c75d', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0x0000000000000000000000000000000000000000000000000000000000000000', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0xf0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0xff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00', 'tokenId': '123000456' }
       // tokenData = { 'hash': '0x00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff', 'tokenId': '123000456' }
-      // remove backface-visible: inherit
-      // start
+      // 0401 (bigger bubbles), no blur
     </script>
   </head>
   <body>
@@ -50,16 +49,16 @@
         return (360 * rad) / (2 * Math.PI);
       };
 
-      const windowWidth = Math.min(window.innerWidth, window.innerHeight) - 20;
+      const windowWidth = Math.min(window.innerWidth, window.innerHeight);
       const windowHeight = windowWidth;
-      const floorWidth = (5 * windowWidth) / 3;
+      const floorWidth = 5 * windowWidth; //3 * windowWidth; //(5 * windowWidth) / 3;
       const floorHeight = floorWidth;
-      const outerNucleusRad = floorWidth / 3;
+      const outerNucleusRad = 5 * windowWidth / 9; //floorWidth / 3;
 
       // The following constants set the allowable range of variables
       const nBubblesRange = [5, 9];
       const leftPosDriftRange = [-windowWidth, windowWidth];
-      const bubbleSizeRange = [windowWidth / 6, windowWidth / 3];
+      const bubbleSizeRange = [windowWidth / 5, windowWidth / 3];
       const durationRange = [6, 15];
       const spinDurationRange = [3, 10];
 
@@ -76,7 +75,7 @@
 
       const style = document.createElement('style');
       style.type = 'text/css';
-      const setBgGradient = (upperBgColor, lightening) => {
+      const setBgGradient = (floorBgColor, upperBgColor, lightening) => {
         style.innerHTML = `
 * {box-sizing: border-box;position: absolute;}
 body {margin: 0;padding: 0;}
@@ -89,7 +88,7 @@ left: 50%;
 margin-top: -${windowWidth / 2}px;
 margin-left: -${windowWidth / 2}px;
 overflow: hidden;
-perspective: ${0.9 * windowWidth}px;
+perspective: ${lerpReal(0.5, 5) * windowWidth}px;
 background: radial-gradient(circle at bottom,
 ${LightenDarkenColor(upperBgColor, lightening)},
 ${upperBgColor});
@@ -97,16 +96,17 @@ ${upperBgColor});
 #floor-datum {
 width: ${floorWidth}px;
 height: ${floorHeight}px;
-left: -${windowWidth / 3}px;
+left: -${2 * windowWidth}px;
+top: -${3 * windowWidth / 2}px;
 transform-style: preserve-3d;
-transform: rotateX(90deg);
+transform: rotateX(${lerpInteger(70, 90)}deg);
 }
 #floor {
 width: ${floorWidth}px;
 height: ${floorHeight}px;
 background: radial-gradient(circle at center,
-${LightenDarkenColor(upperBgColor, lightening)}B0,
-${upperBgColor}B0 70.7%, transparent 70.7%);
+${LightenDarkenColor(floorBgColor, lightening)}B0,
+${floorBgColor}B0 70.7%, transparent 70.7%);
 transform-style: preserve-3d;
 animation: floor-rot ${attributes.floorRotPeriod}s linear infinite;
 }`;
@@ -415,7 +415,9 @@ to { transform: translateZ(${2 * windowHeight}px); left: ${nucleusData[bNum].loc
         }
         attributes.bubbleTypes = bubbleTypes;
         // background base color (dark end of gradient)
-        attributes.bgBaseColor = LightenDarkenColor(getNextColor(), -100);
+        attributes.bgBaseColor = LightenDarkenColor(getNextColor(), -75);
+
+        attributes.floorBaseColor = LightenDarkenColor(attributes.bgBaseColor, -75);
         // 1 in 5 chance of bubbles continuing to spin after 10 sec
         attributes.spinPause = lerpInteger(1, 5) < 5;
 
@@ -524,7 +526,7 @@ to { transform: translateZ(${2 * windowHeight}px); left: ${nucleusData[bNum].loc
             duration / 10
           );
 
-          const distBetwBubbles = lerpInteger(bubbleSize * 2, bubbleSize * 3);
+          const distBetwBubbles = 0.5 * lerpInteger(bubbleSize * 2, bubbleSize * 3);
           const interval =
             (duration * distBetwBubbles * 1000) /
             (1.72 * ((2 * windowHeight) / 3));
@@ -588,14 +590,15 @@ to { transform: translateZ(${2 * windowHeight}px); left: ${nucleusData[bNum].loc
           for (const element of elements) {
             element.style.animationPlayState = 'paused';
           }
-          if (attributes.spinPause) {
+          // if (attributes.spinPause) {
             elements = document.body.getElementsByClassName(
               'b' + bNum + '-element'
             );
             for (const element of elements) {
               element.style.animationPlayState = 'paused';
             }
-          }
+          // }
+          floor.style.animationPlayState = 'paused';
         }
         visibilityCheckerID = setInterval(checkVisibility, 1000);
         setTimeout(
@@ -607,13 +610,13 @@ to { transform: translateZ(${2 * windowHeight}px); left: ${nucleusData[bNum].loc
       const create = (hash) => {
         processHash(hash);
         defineAttributes();
-        setBgGradient(attributes.bgBaseColor, 50);
+        setBgGradient(attributes.floorBaseColor, attributes.bgBaseColor, 50);
         nucleation();
         generateBubbles();
       };
 
       create(tokenData.hash);
-      window.onresize = () => location.reload();
+      // window.onresize = () => location.reload();
     </script>
   </body>
 </html>
