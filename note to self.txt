@@ -1,8 +1,8 @@
 Used NPM terser to compress javascript.
 
-Terser can only compress javascript (not HTML) so I copied the <script> portion of crybbles0313.html
-into a separate .js file called cr0313.js, then ran:
-terser .\cr0313.js -o .\cr0313min.js -c -m toplevel=true --source-map "filename='cr0313min.js.map'"
+Terser can only compress javascript (not HTML) so I copied the <script> portion of crybbles0501.html
+into a separate .js file called cr0501.js, then ran:
+terser .\cr0501.js -o .\cr0501min.js -c -m toplevel=true --source-map "filename='cr0501min.js.map'"
 
 Then I copied the compressed javascript into the script tag in a new HTML file.
 
@@ -17,7 +17,7 @@ CSS portion where I could.  crybbles0311.html is a further modification which pr
 of the div tags in <body>.  crybbles0312.html places all code related to reported features into the
 defineAttributes function.  During development of the defineAttributes function I added a
 console.log(attributes) call for debugging purposes.  I manually removed the console.log call from the 
-compressed javascript.
+compressed javascript. Further changes to script are represented in version 0501.
 
 The combination of all of these efforts reduced the minimized html file from 14529 bytes to 9784 bytes.
 The uncompressed crybbles0309.html file was 25216 bytes.  My goal was to get the compressed file to below
